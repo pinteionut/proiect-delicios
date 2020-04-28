@@ -1,2 +1,2 @@
-# proiect-delicios
-Proiect Delicios 2020
+# Proiect Delicios 2020
+https://trello.com/b/UkQs94Yj/proiect-delicios
