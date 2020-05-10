@@ -17,4 +17,8 @@ class Recipe extends Model
     public function comments(){
         return $this->hasMany('App\Comment');
     }
+    
+    public function menu_recipes(){
+        return $this->hasMany('App\MenuRecipe');
+    }
 }
