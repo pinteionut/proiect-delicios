@@ -52,4 +52,8 @@ class User extends Authenticatable
     public function menus(){
         return $this->hasMany('App\Menu');
     }
+
+    public function storeroom(){
+        return $this->hasOne('App\Storeroom');
+    }
 }
