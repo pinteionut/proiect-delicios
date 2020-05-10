@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Recipe extends Model
+class FavoriteUserRecipe extends Model
 {
     public function user() {
        return $this->belongsTo('App\User');
     }
 
-    public function favorite_user_recipes(){
-        return $this->hasMany('App\FavoriteUserRecipe');
+    public function recipe() {
+       return $this->belongsTo('App\Recipe');
     }
 }
