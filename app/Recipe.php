@@ -13,4 +13,8 @@ class Recipe extends Model
     public function favorite_user_recipes(){
         return $this->hasMany('App\FavoriteUserRecipe');
     }
+
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
 }

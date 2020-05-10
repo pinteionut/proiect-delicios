@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function favorite_user_recipes(){
         return $this->hasMany('App\FavoriteUserRecipe');
     }
+    
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
 }
