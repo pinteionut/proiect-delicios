@@ -40,4 +40,20 @@ class User extends Authenticatable
     public function recipes(){
         return $this->hasMany('App\Recipe');
     }
+    
+    public function favorite_user_recipes(){
+        return $this->hasMany('App\FavoriteUserRecipe');
+    }
+    
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
+
+    public function menus(){
+        return $this->hasMany('App\Menu');
+    }
+
+    public function storeroom(){
+        return $this->hasOne('App\Storeroom');
+    }
 }

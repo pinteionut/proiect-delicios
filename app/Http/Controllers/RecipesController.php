@@ -54,6 +54,23 @@ class RecipesController extends Controller
         return redirect(route("users.recipes.index", $user_id));
     }
 
+    public function addRecipe(Request $request)
+    {
+        $data = json_decode($request->getContent());
+        $recipe = new Recipe;
+        $recipe->name = $data->name;
+        $recipe->body = $data->body;
+        $recipe->type = 'default';
+        $recipe->status = 0;
+        $recipe->dificulty = $data->dificulty;
+        $recipe->portions = $data->portions;
+        $recipe->preparation_time = $data->preparation_time;
+        $recipe->user_id = Auth::user()->id;
+        $recipe->save();
+
+        return ['redirect' => route("users.recipes.index", Auth::user()->id)];
+    }
+
     /**
      * Display the specified resource.
      *
