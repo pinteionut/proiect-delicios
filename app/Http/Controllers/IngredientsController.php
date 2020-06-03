@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Ingredient;
-
 class IngredientsController extends Controller
 {
     /**
@@ -12,9 +11,15 @@ class IngredientsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->wantsJson()) {
+            $ingredients = Ingredient::all();
+            return response()->json(json_encode($ingredients));
+        }
+        else {
+            return view('ingredients.index');
+        }
     }
 
     /**
@@ -24,7 +29,7 @@ class IngredientsController extends Controller
      */
     public function create()
     {
-        //
+        return view('ingredients.create');
     }
 
     /**
@@ -35,15 +40,23 @@ class IngredientsController extends Controller
      */
     public function store(Request $request)
     {
+        $data = json_decode($request->getContent());
         $ingredient = new Ingredient;
-        $ingredient->name = $request->name;
-        $ingredient->calories = $request->calories;
-        $ingredient->default_quantity = $request->default_quantity;
-        $ingredient->measure_type = $request->measure_type;
-        $ingredient->status = $request->status;
-        $ingredient->type = $request->type;
-        $ingredient->diet = $request->diet;
+        $ingredient->name = $data->name;
+        $ingredient->calories = $data->calories;
+        $ingredient->default_quantity = $data->default_quantity;
+        $ingredient->measure_type = $data->measure_type;
+        $ingredient->status = 0;
+        $ingredient->type = $data->type;
+        $ingredient->diet = $data->diet;
         $ingredient->save();
+        return ['redirect' => route("ingredients.index")];
+    }
+
+    public function searchIngredient(Request $request)
+    {
+        $ingredients = Ingredient::where('name', 'like', '%' . $request->input('term') . '%')->whereNotIn('id', $request->input('avoid'))->get();
+        return response()->json(json_encode($ingredients));
     }
 
     /**

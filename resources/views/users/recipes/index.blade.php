@@ -27,7 +27,7 @@
                     <td>{{$recipe->portions}}</td>
                     <td>{{$recipe->preparation_time}}</td>
                     <td>
-                      <a class='btn btn-dark' href={{ route('users.recipes.edit', [$recipe->user_id, $recipe->id]) }}>Edit</a>
+                      <a class='btn btn-dark disabled' href={{ route('users.recipes.edit', [$recipe->user_id, $recipe->id]) }}>Edit - Feature In Progress</a>
                     </td>
                     <td>
                       {!!Form::open([

@@ -1,0 +1,7 @@
+.discover-recipe-container{
+    cursor: pointer;
+    transition: all 1s;
+    &:hover {
+        background-color: lightblue !important;
+    }
+}

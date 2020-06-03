@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Storeroom;
+use App\User;
+use App\IngredientStoreroom;
 
 class StoreroomsController extends Controller
 {
@@ -46,9 +48,52 @@ class StoreroomsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        if($request->wantsJson()) {
+            $user = User::find($id);
+            $ingredients = $user->storeroom->ingredients;
+            return response()->json(json_encode($ingredients));
+
+        } else {
+            return view('users.storeroom.show');
+        }
+    }
+
+    public function add_ingredient(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $ingredient_storeroom = new IngredientStoreroom;
+        $ingredient_storeroom -> ingredient_id = $request->input('ingredient_id');
+        $ingredient_storeroom -> storeroom_id = $user->storeroom->id;
+        $ingredient_storeroom -> quantity = $request->input('quantity');
+        $ingredient_storeroom -> save();
+        
+        $ingredients = $user->storeroom->ingredients;
+        return response()->json(json_encode($ingredients));
+    }
+
+    public function remove_ingredient(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        IngredientStoreroom::where('ingredient_id', 'like', '%' . $request->input('ingredient_id') . '%')->where('storeroom_id', $user->storeroom->id) -> delete();
+        
+        $ingredients = $user->storeroom->ingredients;
+        return response()->json(json_encode($ingredients));
+    }
+    
+    public function update_ingredient(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $ingredient_storeroom = IngredientStoreroom::where('ingredient_id', 'like', '%' . $request->input('ingredient_id') . '%')->where('storeroom_id', $user->storeroom->id) -> first();
+        $ingredient_storeroom -> quantity = $request->input('quantity');
+        $ingredient_storeroom -> save();
+
+        $ingredients = $user->storeroom->ingredients;
+        return response()->json(json_encode($ingredients));
     }
 
     /**

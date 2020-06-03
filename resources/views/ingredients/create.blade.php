@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="container">
-        <div id="add-recipe"></div>
+        <div id="create-ingredient"></div>
     </div>
 @endsection

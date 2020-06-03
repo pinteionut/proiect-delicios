@@ -18,6 +18,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/32314d3d57.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div id="app">
@@ -35,6 +38,9 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('discover_recipes') }}">{{ __('Rețete') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('ingredients.index') }}">{{ __('Ingrediente') }}</a>
                         </li>
                     </ul>
 
@@ -57,10 +63,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route("users.recipes.index", Auth::user()->id) }}">
+                                    <a class="dropdown-item" href="{{ route("users.recipes.index", Auth::user()->id) }}">
                                         {{ __('Rețetele Mele') }}
                                     </a>
-
+                                    <a class="dropdown-item" href="{{ route("storeroom", Auth::user()->id) }}">
+                                        {{ __('Cămara mea') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
