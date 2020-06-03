@@ -14,3 +14,8 @@ require('./bootstrap');
 
 require('./components/Example');
 require('./components/add_recipe');
+require('./components/discover_recipes');
+require('./components/ingredients');
+require('./components/create_ingredient');
+require('./components/show_recipe');
+require('./components/storeroom');

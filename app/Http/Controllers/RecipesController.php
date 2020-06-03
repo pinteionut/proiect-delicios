@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Recipe;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\IngredientRecipe;
 
 class RecipesController extends Controller
 {
@@ -14,12 +15,39 @@ class RecipesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user_id)
+    public function index(Request $request, $user_id)
     {
+        if($request->wantsJson()) {
+            $recipes = Recipe::all();
+            if($request->input('filters_on') == 'true') {
 
-        $user = User::find($user_id);
-        $recipes = $user->recipes;
-        return view('users.recipes.index')->with('recipes', $recipes);
+                if($request->input('type')) {
+                    $recipes = Recipe::whereIn('type', $request->input('type'));
+                    $recipes = $recipes->get();
+                }
+                if($request->input('needed_ingredients')) {
+                    $needed = $request->input('needed_ingredients');
+                    $recipes = $recipes->filter(function ($recipe) use ($needed) {
+                        return Auth::user()->prepare($recipe, $needed);
+                    })->values();
+                }
+                // else {
+                //     $recipes = $recipes->get();
+                // }
+            }
+            return response()->json(json_encode($recipes));
+        }
+        else {
+            $user = User::find($user_id);
+            $recipes = $user->recipes;
+            return view('users.recipes.index')->with('recipes', $recipes);
+        }
+    }
+
+    public function types()
+    {
+        $recipe_types = Recipe::groupBy('type')->pluck('type');
+        return response()->json(json_encode($recipe_types));
     }
 
     /**
@@ -60,13 +88,21 @@ class RecipesController extends Controller
         $recipe = new Recipe;
         $recipe->name = $data->name;
         $recipe->body = $data->body;
-        $recipe->type = 'default';
+        $recipe->type = $data->type;
         $recipe->status = 0;
         $recipe->dificulty = $data->dificulty;
         $recipe->portions = $data->portions;
         $recipe->preparation_time = $data->preparation_time;
         $recipe->user_id = Auth::user()->id;
         $recipe->save();
+
+        foreach($data->ingredients as $ingredient) {
+            $ingredient_recipe = new IngredientRecipe;
+            $ingredient_recipe->ingredient_id = $ingredient->id;
+            $ingredient_recipe->recipe_id = $recipe->id;
+            $ingredient_recipe->quantity = $ingredient->quantity;
+            $ingredient_recipe->save();
+        }
 
         return ['redirect' => route("users.recipes.index", Auth::user()->id)];
     }
@@ -129,6 +165,9 @@ class RecipesController extends Controller
     public function destroy($user_id, $id)
     {
         $recipe = Recipe::find($id);
+        foreach($recipe->ingredient_recipes as $ingredient_recipe) {
+            $ingredient_recipe->delete();
+        }
         $recipe->delete();
 
         return redirect(route("users.recipes.index", $user_id));

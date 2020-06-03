@@ -12,3 +12,30 @@
 
 // Add Recipe
 @import "add-recipe";
+
+// Discover Recipes
+@import "discover-recipes";
+
+.add-ingredient {
+    cursor: pointer;
+}
+
+.fa-times {
+    cursor: pointer;
+}
+
+.ingredient-quantity {
+    width: 60px;
+}
+
+.fa-arrow-alt-circle-left{
+    cursor: pointer;
+}
+
+.fa-edit{
+    cursor: pointer;
+}
+
+.fa-save{
+    cursor: pointer;
+}
